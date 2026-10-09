@@ -4,8 +4,8 @@ Agents: read this file first. Work the first slice that is not `done`. Update it
 
 | Slice | File | Status | Note |
 |---|---|---|---|
-| 00 | docs/slices/00-setup.md | todo | needs PHP+Composer+MySQL+Node installed first |
-| 01 | docs/slices/01-auth-rbac.md | todo |
+| 00 | docs/slices/00-setup.md | done | Laravel 12, not 11 — see log |
+| 01 | docs/slices/01-auth-rbac.md | todo | next |
 | 02 | docs/slices/02-admin-shell.md | todo |
 | 03 | docs/slices/03-leads.md | todo |
 | 04 | docs/slices/04-candidates.md | todo |
@@ -27,3 +27,4 @@ Status values: todo, in-progress, blocked (reason in log), done.
 
 ## Log
 <!-- One line per session: date, slice, what changed, anything the next session must know. Keep it short. -->
+- 2026-10-09 slice 00 done. Toolchain installed to home dir (PHP 8.3.12, Composer, Node 22, MySQL 8.4 on port 3307) — see docs/DEV-ENVIRONMENT.md. **Laravel 12.69.3 instead of 11**: Laravel 11 has 4 unpatched advisories incl. one high (CRLF injection in the default email validation rule); 12 requires the same PHP 8.2, so Hostinger is unaffected and the spec's structure is unchanged. `composer audit` is clean. Breeze (Blade) + google2fa + excel + dompdf installed. Brand tokens in tailwind.config.js, fonts via <link> not CSS @import. 28 tests pass on MySQL, pint clean, npm run build works.

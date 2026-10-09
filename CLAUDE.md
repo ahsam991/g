@@ -7,7 +7,7 @@ Laravel 11 system for Global Consultancy Education: public site, CRM, and candid
 - Never load the full spec. Grep it for a keyword if a detail is missing.
 
 ## Stack
-PHP 8.2, Laravel 11, MySQL 8, Blade, Tailwind 3.4, Alpine 3, Vite, Breeze, DomPDF, maatwebsite/excel, pragmarx/google2fa.
+PHP 8.2 target (8.3 local), Laravel 12, MySQL 8, Blade, Tailwind 3.4, Alpine 3, Vite, Breeze, DomPDF, maatwebsite/excel, pragmarx/google2fa.
 Public-site glass effects: vendored liquid-glass-js in `resources/vendor/liquid-glass/`; usage rules in the `liquid-glass` skill (`.claude/skills/liquid-glass/SKILL.md`).
 
 ## Roles (3)
@@ -50,6 +50,8 @@ Controllers contain no business logic and no raw queries. Anything used twice be
 - Each slice ships feature tests plus IDOR/policy tests.
 
 ## Commands
+Local toolchain lives in the home directory; see `docs/DEV-ENVIRONMENT.md` for PATH and how to start MySQL on port 3307.
+
 ```
 composer test        # php artisan test
 ./vendor/bin/pint    # format

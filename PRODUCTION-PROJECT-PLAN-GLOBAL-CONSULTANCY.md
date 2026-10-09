@@ -62,7 +62,7 @@
 ### 3. TECH STACK - PRODUCTION LOCKED FOR HOSTINGER
 
 ```
-Backend: PHP 8.2 (Hostinger hPanel Advanced → PHP Configuration), Laravel 11, MySQL 8 (via phpMyAdmin), Eloquent ORM
+Backend: PHP 8.2 (Hostinger hPanel Advanced → PHP Configuration), Laravel 12 (11 has unpatched security advisories; 12 needs the same PHP 8.2), MySQL 8 (via phpMyAdmin), Eloquent ORM
 Frontend Public + CRM + Portal: Blade, Tailwind CSS 3.4, Alpine.js 3, Inter font + Instrument Serif headings
 Build: Vite, npm run build locally → commit public/build → upload to Hostinger (no Node in prod)
 Queue: database (not Redis - Hostinger no Redis), Cache: file, Session: database, Storage: local + private disk storage/app/private/candidates/{id}/ (NOT public)
