@@ -11,12 +11,24 @@ use App\Http\Controllers\Auth\TwoFactorSetupController;
 use App\Http\Controllers\CandidateBulkController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CandidateImportController;
+use App\Http\Controllers\EnquiryController;
+use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PublicController;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Public marketing site
+Route::get('/', [PublicController::class, 'home'])->name('home');
+Route::get('/about', [PublicController::class, 'about'])->name('about');
+Route::get('/destinations', [PublicController::class, 'destinations'])->name('destinations');
+Route::get('/courses', [PublicController::class, 'courses'])->name('courses');
+Route::get('/services', [PublicController::class, 'services'])->name('services');
+Route::get('/contact', [PublicController::class, 'contact'])->name('contact');
+Route::get('/privacy', [PublicController::class, 'privacy'])->name('privacy');
+Route::get('/terms', [PublicController::class, 'terms'])->name('terms');
+Route::post('/enquiry', [EnquiryController::class, 'store'])
+    ->middleware('throttle:10,1')
+    ->name('enquiry.store');
 
 Route::get('/dashboard', fn () => view('dashboard'))
     ->middleware(['auth', 'verified', 'noindex'])
@@ -29,6 +41,12 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::middleware(['auth', 'verified', 'noindex'])->group(function () {
+    // Leads
+    Route::resource('leads', LeadController::class)->except(['destroy']);
+    Route::post('leads/{lead}/activity', [LeadController::class, 'addActivity'])->name('leads.activity');
+    Route::post('leads/{lead}/convert', [LeadController::class, 'convert'])->name('leads.convert');
+    Route::post('leads/{lead}/assign', [LeadController::class, 'assign'])->name('leads.assign');
+
     // Fixed segments first: otherwise /candidates/create matches {candidate}.
     Route::post('candidates/bulk', CandidateBulkController::class)->name('candidates.bulk');
 

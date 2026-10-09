@@ -28,6 +28,10 @@ class SettingSeeder extends Seeder
 
             // Social ------------------------------------------------------
             ['social.facebook', 'https://www.facebook.com/GCEduLimited', 'string', 'social', 'Facebook'],
+            ['social.instagram', 'https://www.instagram.com/global_consultancy_education', 'string', 'social', 'Instagram'],
+            ['social.youtube', 'https://www.youtube.com/@globalconsultancy-xf5jh', 'string', 'social', 'YouTube'],
+            ['social.twitter', 'https://x.com/GlobalCons78186', 'string', 'social', 'X / Twitter'],
+            ['social.whatsapp', 'https://wa.me/447402993321', 'string', 'social', 'WhatsApp'],
             ['social.followers', '19000', 'int', 'social', 'Facebook followers'],
 
             // Marketing claims used on the public site ---------------------

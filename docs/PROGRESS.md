@@ -7,7 +7,7 @@ Agents: read this file first. Work the first slice that is not `done`. Update it
 | 00 | docs/slices/00-setup.md | done | Laravel 12, not 11 — see log |
 | 01 | docs/slices/01-auth-rbac.md | done | |
 | 02 | docs/slices/02-admin-shell.md | done | |
-| 03 | docs/slices/03-leads.md | todo | next; conversion target now exists |
+| 03 | docs/slices/03-leads.md | done | |
 | 04 | docs/slices/04-candidates.md | done | built before 03 |
 | 05 | docs/slices/05-documents.md | todo |
 | 06 | docs/slices/06-catalogue.md | todo |

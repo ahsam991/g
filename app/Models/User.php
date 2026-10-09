@@ -85,6 +85,12 @@ class User extends Authenticatable implements MustVerifyEmailContract
         return $this->hasMany(Candidate::class, 'assigned_to');
     }
 
+    /** Leads this consultant is responsible for. */
+    public function assignedLeads(): HasMany
+    {
+        return $this->hasMany(Lead::class, 'assigned_to');
+    }
+
     /** The student record behind a portal account. */
     public function candidate(): BelongsTo
     {

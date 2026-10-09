@@ -3,7 +3,28 @@
 @tailwind utilities;
 
 :root { color-scheme: light; }
-body { background-color: #F8FAFC; color: #0F172A; }
+body {
+  background-color: #F8FAFC;
+  color: #0F172A;
+  -webkit-text-size-adjust: 100%;
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Tap highlight on mobile */
+a, button, [role="button"] {
+  -webkit-tap-highlight-color: rgba(11, 44, 92, 0.08);
+}
+
+/* Smooth scrolling for anchor links, respects user preference */
+html { scroll-behavior: smooth; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; scroll-behavior: auto !important; }
+  html { scroll-behavior: auto; }
+}
+
+/* Mobile-friendly form elements */
+select, input, textarea {
+  font-size: 16px; /* prevents iOS zoom on focus */
 }

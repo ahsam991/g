@@ -15,6 +15,7 @@ class Uid
 {
     private const PREFIXES = [
         'candidate' => 'GC',
+        'lead' => 'LD',
         'application' => 'APP',
         'invoice' => 'INV',
         'payment' => 'PAY',

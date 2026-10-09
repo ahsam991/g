@@ -29,10 +29,10 @@
             <x-crm.nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">Dashboard</x-crm.nav-link>
 
             @can('leads.view')
-                <x-crm.nav-link href="#" :active="request()->routeIs('leads.*')">Leads</x-crm.nav-link>
+                <x-crm.nav-link :href="route('leads.index')" :active="request()->routeIs('leads.*')">Leads</x-crm.nav-link>
             @endcan
             @can('candidates.view')
-                <x-crm.nav-link href="#" :active="request()->routeIs('candidates.*')">Students</x-crm.nav-link>
+                <x-crm.nav-link :href="route('candidates.index')" :active="request()->routeIs('candidates.*')">Students</x-crm.nav-link>
             @endcan
             @can('applications.view')
                 <x-crm.nav-link href="#" :active="request()->routeIs('applications.*')">Applications</x-crm.nav-link>
