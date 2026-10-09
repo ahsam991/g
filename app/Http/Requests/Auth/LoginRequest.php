@@ -2,6 +2,8 @@
 
 namespace App\Http\Requests\Auth;
 
+use App\Models\LoginHistory;
+use App\Models\User;
 use Illuminate\Auth\Events\Lockout;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
@@ -42,15 +44,70 @@ class LoginRequest extends FormRequest
     {
         $this->ensureIsNotRateLimited();
 
+        $user = User::where('email', $this->string('email'))->first();
+
+        if ($user && $user->isLocked()) {
+            $this->recordAttempt($user, false, 'locked');
+
+            throw ValidationException::withMessages([
+                'email' => trans('auth.throttle', [
+                    'seconds' => $user->locked_until->diffInSeconds(now()),
+                ]),
+            ]);
+        }
+
         if (! Auth::attempt($this->only('email', 'password'), $this->boolean('remember'))) {
             RateLimiter::hit($this->throttleKey());
+
+            $user?->registerFailedLogin();
+            $this->recordAttempt($user, false, 'bad-credentials');
 
             throw ValidationException::withMessages([
                 'email' => trans('auth.failed'),
             ]);
         }
 
+        $authenticated = Auth::user();
+
+        // A suspended account must not get a session, even with the right password.
+        if (! $authenticated->isActive()) {
+            Auth::logout();
+            $this->recordAttempt($authenticated, false, 'inactive');
+
+            throw ValidationException::withMessages([
+                'email' => 'This account is not available. Contact an administrator.',
+            ]);
+        }
+
         RateLimiter::clear($this->throttleKey());
+
+        // With two-factor on, the password alone must not create a session.
+        if ($authenticated->hasTwoFactorEnabled()) {
+            Auth::logout();
+
+            $this->session()->put('two_factor_user_id', $authenticated->id);
+            $this->session()->put('two_factor_remember', $this->boolean('remember'));
+
+            $this->recordAttempt($authenticated, false, 'awaiting-2fa');
+
+            return;
+        }
+
+        $authenticated->registerSuccessfulLogin();
+        $this->recordAttempt($authenticated, true, null);
+    }
+
+    /** Writes one row per sign-in attempt, successful or not. */
+    protected function recordAttempt(?User $user, bool $successful, ?string $reason): void
+    {
+        LoginHistory::create([
+            'user_id' => $user?->id,
+            'email' => (string) $this->string('email'),
+            'successful' => $successful,
+            'ip_address' => $this->ip(),
+            'user_agent' => substr((string) $this->userAgent(), 0, 512),
+            'reason' => $reason,
+        ]);
     }
 
     /**

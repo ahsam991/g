@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
@@ -41,5 +42,33 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => [
             'email_verified_at' => null,
         ]);
+    }
+
+    /** Assigns a role by slug, creating the role row if the seeder has not run. */
+    public function role(string $slug): static
+    {
+        return $this->state(fn () => [
+            'role_id' => Role::firstOrCreate(['slug' => $slug], ['name' => ucfirst($slug)])->id,
+        ]);
+    }
+
+    public function admin(): static
+    {
+        return $this->role(Role::ADMIN);
+    }
+
+    public function consultant(): static
+    {
+        return $this->role(Role::CONSULTANT);
+    }
+
+    public function student(): static
+    {
+        return $this->role(Role::STUDENT);
+    }
+
+    public function suspended(): static
+    {
+        return $this->state(fn () => ['status' => 'suspended']);
     }
 }
