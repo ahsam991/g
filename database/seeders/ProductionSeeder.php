@@ -15,6 +15,7 @@ class ProductionSeeder extends Seeder
         $this->call([
             RolePermissionSeeder::class,
             BranchSeeder::class,
+            SettingSeeder::class,
         ]);
 
         $email = 'admin@gconsultancy.co.uk';

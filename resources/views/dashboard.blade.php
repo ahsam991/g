@@ -1,17 +1,17 @@
-<x-app-layout>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+<x-layouts.crm title="Dashboard">
+    <x-page-header :title="'Hello, '.Str::before(auth()->user()->name, ' ')"
+                   :subtitle="auth()->user()->role?->name.' · '.(auth()->user()->branch?->name ?? 'No office set')" />
 
-    <div class="py-12">
-        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
-                <div class="p-6 text-gray-900">
-                    {{ __("You're logged in!") }}
-                </div>
-            </div>
-        </div>
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <x-stat-card label="Students" value="—" />
+        <x-stat-card label="Open applications" value="—" />
+        <x-stat-card label="Documents to verify" value="—" tone="warning" />
+        <x-stat-card label="Tasks due today" value="—" tone="orange" />
     </div>
-</x-app-layout>
+
+    <div class="mt-6">
+        <x-empty-state
+            title="Your dashboard fills up as the system is built"
+            message="Live counts, charts and the application funnel arrive with the reporting step. Everything you see here already reads from the database." />
+    </div>
+</x-layouts.crm>

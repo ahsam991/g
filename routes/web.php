@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\Admin\BranchController;
+use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\SettingController;
+use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForcedPasswordChangeController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\Auth\TwoFactorSetupController;
@@ -10,15 +15,36 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::get('/dashboard', fn () => view('dashboard'))
+    ->middleware(['auth', 'verified', 'noindex'])
+    ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+// Every signed-in area stays out of search engines.
+Route::middleware(['auth', 'verified', 'noindex', 'permission:users.manage'])
+    ->prefix('admin')->name('admin.')->group(function () {
+        Route::resource('users', UserController::class)->except(['show']);
+        Route::get('roles', [RoleController::class, 'index'])->name('roles.index');
+        Route::get('roles/{role}/edit', [RoleController::class, 'edit'])->name('roles.edit');
+        Route::put('roles/{role}', [RoleController::class, 'update'])->name('roles.update');
+        Route::resource('branches', BranchController::class)->except(['show', 'destroy']);
+    });
+
+Route::middleware(['auth', 'verified', 'noindex', 'permission:settings.manage'])
+    ->prefix('admin')->name('admin.')->group(function () {
+        Route::get('settings', [SettingController::class, 'edit'])->name('settings.edit');
+        Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
+    });
+
+Route::middleware(['auth', 'verified', 'noindex', 'permission:audit.view'])
+    ->prefix('admin')->name('admin.')->group(function () {
+        Route::get('audit', [AuditLogController::class, 'index'])->name('audit.index');
+    });
 
 Route::middleware('auth')->group(function () {
     Route::get('/password/change', [ForcedPasswordChangeController::class, 'show'])->name('password.change');
