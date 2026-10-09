@@ -8,6 +8,9 @@ use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForcedPasswordChangeController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
 use App\Http\Controllers\Auth\TwoFactorSetupController;
+use App\Http\Controllers\CandidateBulkController;
+use App\Http\Controllers\CandidateController;
+use App\Http\Controllers\CandidateImportController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +26,21 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+});
+
+Route::middleware(['auth', 'verified', 'noindex'])->group(function () {
+    // Fixed segments first: otherwise /candidates/create matches {candidate}.
+    Route::post('candidates/bulk', CandidateBulkController::class)->name('candidates.bulk');
+
+    Route::get('candidates/import', [CandidateImportController::class, 'show'])->name('candidates.import');
+    Route::post('candidates/import', [CandidateImportController::class, 'store'])->name('candidates.import.store');
+    Route::get('candidates/export', [CandidateImportController::class, 'export'])->name('candidates.export');
+
+    Route::resource('candidates', CandidateController::class)->except(['show', 'destroy']);
+
+    Route::get('candidates/{candidate}', [CandidateController::class, 'show'])->name('candidates.show');
+    Route::post('candidates/{candidate}/archive', [CandidateController::class, 'archive'])->name('candidates.archive');
+    Route::post('candidates/{candidate}/restore', [CandidateController::class, 'restore'])->name('candidates.restore');
 });
 
 // Every signed-in area stays out of search engines.

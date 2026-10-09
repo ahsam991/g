@@ -37,7 +37,7 @@ class User extends Authenticatable implements MustVerifyEmailContract
     ];
 
     protected $fillable = [
-        'name', 'email', 'password', 'phone', 'role_id', 'team_id', 'branch_id',
+        'name', 'email', 'password', 'phone', 'role_id', 'team_id', 'branch_id', 'candidate_id',
         'status', 'must_change_password',
     ];
 
@@ -77,6 +77,18 @@ class User extends Authenticatable implements MustVerifyEmailContract
     public function loginHistories(): HasMany
     {
         return $this->hasMany(LoginHistory::class);
+    }
+
+    /** Students this consultant is responsible for. */
+    public function assignedCandidates(): HasMany
+    {
+        return $this->hasMany(Candidate::class, 'assigned_to');
+    }
+
+    /** The student record behind a portal account. */
+    public function candidate(): BelongsTo
+    {
+        return $this->belongsTo(Candidate::class);
     }
 
     // Roles -------------------------------------------------------------
