@@ -61,6 +61,7 @@
             @endcan
             @can('settings.manage')
                 <x-crm.nav-link :href="route('admin.settings.edit')" :active="request()->routeIs('admin.settings.*')">Settings</x-crm.nav-link>
+                <x-crm.nav-link :href="route('admin.sliders.index')" :active="request()->routeIs('admin.sliders.*')">Sliders</x-crm.nav-link>
             @endcan
             @can('audit.view')
                 <x-crm.nav-link :href="route('admin.audit.index')" :active="request()->routeIs('admin.audit.*')">Audit log</x-crm.nav-link>

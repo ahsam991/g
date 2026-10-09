@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Slider;
 use Illuminate\View\View;
 
-/** Serves the public marketing pages. These are open to everyone. */
 class PublicController extends Controller
 {
     public function home(): View
     {
-        return view('public.home');
+        $sliders = Slider::active()->get();
+
+        return view('public.home', compact('sliders'));
     }
 
     public function about(): View

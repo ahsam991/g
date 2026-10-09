@@ -1,11 +1,116 @@
 <x-layouts.public title="Study Abroad Consultancy" description="100% FREE education counselling and application processing. Dream to study abroad? Find the right path with Global Consultancy.">
-    {{-- HERO with animated text and floating cards --}}
-    <section class="relative overflow-hidden bg-gradient-to-b from-canvas to-white pt-24 pb-14 sm:pt-32 sm:pb-20">
+    {{-- HERO SLIDER with liquid-glass overlay --}}
+    <section class="relative overflow-hidden bg-gradient-to-b from-canvas to-white"
+             x-data="heroSlider()"
+             x-init="init()">
         {{-- Decorative blobs --}}
-        <div class="pointer-events-none absolute -right-32 -top-24 h-96 w-96 rounded-full bg-orange/10 blur-3xl animate-pulse-slow"></div>
-        <div class="pointer-events-none absolute -left-40 bottom-0 h-80 w-80 rounded-full bg-navy/5 blur-3xl"></div>
+        <div class="pointer-events-none absolute -right-32 -top-24 z-10 h-96 w-96 rounded-full bg-orange/10 blur-3xl animate-pulse-slow"></div>
+        <div class="pointer-events-none absolute -left-40 bottom-0 z-10 h-80 w-80 rounded-full bg-navy/5 blur-3xl"></div>
 
-        <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 sm:px-6 lg:grid-cols-2 lg:gap-12">
+        @if($sliders->count())
+        {{-- Slides --}}
+        <div class="relative min-h-[600px] sm:min-h-[700px]">
+            @foreach($sliders as $i => $slide)
+            <div class="absolute inset-0 transition-opacity duration-700 ease-in-out"
+                 :class="active === {{ $i }} ? 'opacity-100 z-20' : 'opacity-0 z-0'"
+                 aria-hidden="active !== {{ $i }}">
+                {{-- Background image --}}
+                @if($slide->image)
+                <div class="absolute inset-0">
+                    <img src="{{ asset('storage/' . $slide->image) }}" alt=""
+                         class="h-full w-full object-cover"
+                         loading="{{ $i === 0 ? 'eager' : 'lazy' }}">
+                    <div class="absolute inset-0 bg-gradient-to-r from-navy/80 via-navy/60 to-navy/30"></div>
+                </div>
+                @else
+                <div class="absolute inset-0 bg-gradient-to-br from-navy via-navy-900 to-navy"></div>
+                @endif
+
+                {{-- Content --}}
+                <div class="relative z-10 mx-auto flex min-h-[600px] max-w-7xl items-center px-4 pt-24 pb-14 sm:min-h-[700px] sm:px-6 sm:pt-32 sm:pb-20">
+                    <div class="max-w-2xl" x-show="active === {{ $i }}"
+                         x-transition:enter="transition ease-out duration-700 delay-200"
+                         x-transition:enter-start="opacity-0 translate-y-6"
+                         x-transition:enter-end="opacity-100 translate-y-0"
+                         x-transition:leave="transition ease-in duration-300"
+                         x-transition:leave-start="opacity-100"
+                         x-transition:leave-end="opacity-0">
+                        @if($slide->badge_text)
+                        <span class="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-1.5 text-sm font-medium text-white backdrop-blur-sm">
+                            <span class="relative flex h-2 w-2">
+                                <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-orange opacity-75"></span>
+                                <span class="relative inline-flex h-2 w-2 rounded-full bg-orange"></span>
+                            </span>
+                            {{ $slide->badge_text }}
+                        </span>
+                        @endif
+                        <h1 class="mt-4 font-display text-3xl leading-[1.1] text-white sm:mt-5 sm:text-5xl lg:text-6xl xl:text-[72px]">
+                            {!! $slide->title !!}
+                        </h1>
+                        @if($slide->subtitle)
+                        <p class="mt-4 max-w-lg text-base text-white/80 sm:mt-5 sm:text-lg">{{ $slide->subtitle }}</p>
+                        @endif
+                        <div class="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:gap-4">
+                            @if($slide->cta_text && $slide->cta_link)
+                            <a href="{{ $slide->cta_link }}"
+                               class="glass-btn group relative overflow-hidden rounded-full border border-white/30 bg-white/15 px-7 py-3.5 text-center font-semibold text-white shadow-lg backdrop-blur-md transition-all duration-300 hover:bg-white/25 hover:shadow-xl active:scale-[.98]">
+                                <span class="relative z-10">{{ $slide->cta_text }}</span>
+                                <span class="absolute inset-0 -translate-x-full bg-gradient-to-r from-transparent via-white/20 to-transparent transition-transform duration-700 group-hover:translate-x-full"></span>
+                            </a>
+                            @endif
+                            @if($slide->cta2_text && $slide->cta2_link)
+                            <a href="{{ $slide->cta2_link }}"
+                               class="rounded-full border border-white/30 bg-white/10 px-7 py-3.5 text-center font-semibold text-white backdrop-blur-sm transition-all duration-300 hover:bg-white/20 active:scale-[.98]">
+                                {{ $slide->cta2_text }}
+                            </a>
+                            @endif
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @endforeach
+
+            {{-- Floating glass cards --}}
+            <div class="pointer-events-none absolute inset-0 z-30">
+                <div class="absolute -left-2 top-1/3 hidden rounded-2xl border border-white/40 bg-white/15 px-4 py-3 shadow-lg backdrop-blur-xl sm:block sm:-left-4 sm:px-5 sm:py-4 animate-float-left lg:left-auto lg:right-[30%] lg:top-1/4">
+                    <div class="flex items-center gap-3">
+                        <span class="grid h-9 w-9 place-items-center rounded-full bg-success/20 text-white sm:h-10 sm:w-10">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/></svg>
+                        </span>
+                        <div><p class="text-xs text-white/70">Visa Approved</p><p class="text-sm font-semibold text-white sm:text-base">UK Student Visa</p></div>
+                    </div>
+                </div>
+                <div class="absolute -right-2 bottom-1/4 hidden rounded-2xl border border-white/40 bg-white/15 px-4 py-3 shadow-lg backdrop-blur-xl sm:block sm:-right-4 sm:px-5 sm:py-4 animate-float-right lg:right-[10%] lg:bottom-1/3">
+                    <div class="flex items-center gap-3">
+                        <span class="grid h-9 w-9 place-items-center rounded-full bg-orange/20 text-white sm:h-10 sm:w-10">🎓</span>
+                        <div><p class="text-xs text-white/70">Offer Received</p><p class="text-sm font-semibold text-white sm:text-base">Conditional Offer</p></div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- Slide indicators --}}
+            @if($sliders->count() > 1)
+            <div class="absolute bottom-8 left-1/2 z-30 flex -translate-x-1/2 gap-2.5">
+                @foreach($sliders as $i => $slide)
+                <button @click="goTo({{ $i }})" class="group relative h-3 w-3 rounded-full transition-all duration-300"
+                        :class="active === {{ $i }} ? 'bg-white w-8' : 'bg-white/40 hover:bg-white/70'"
+                        aria-label="Go to slide {{ $i + 1 }}">
+                </button>
+                @endforeach
+            </div>
+
+            {{-- Nav arrows --}}
+            <button @click="prev()" class="absolute left-4 top-1/2 z-30 hidden -translate-y-1/2 rounded-full border border-white/20 bg-white/10 p-3 text-white backdrop-blur-sm transition-all hover:bg-white/20 sm:block" aria-label="Previous slide">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5 8.25 12l7.5-7.5"/></svg>
+            </button>
+            <button @click="next()" class="absolute right-4 top-1/2 z-30 hidden -translate-y-1/2 rounded-full border border-white/20 bg-white/10 p-3 text-white backdrop-blur-sm transition-all hover:bg-white/20 sm:block" aria-label="Next slide">
+                <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5"/></svg>
+            </button>
+            @endif
+        </div>
+        @else
+        {{-- Fallback static hero when no slides in DB --}}
+        <div class="mx-auto grid max-w-7xl items-center gap-10 px-4 pt-24 pb-14 sm:px-6 sm:pt-32 sm:pb-20 lg:grid-cols-2 lg:gap-12">
             <div x-data x-intersect.once="$el.classList.add('animate-rise')" class="opacity-0">
                 <span class="inline-flex items-center gap-2 rounded-full bg-orange/10 px-4 py-1.5 text-sm font-medium text-orange">
                     <span class="relative flex h-2 w-2">
@@ -18,10 +123,6 @@
                     Dream to Study Abroad? <span class="italic text-orange">Just Click &amp; Achieve It</span>
                 </h1>
                 <p class="mt-4 max-w-lg text-base text-muted sm:mt-5 sm:text-lg">{{ settings('company.subtagline', 'Find The Right Path with Global Consultancy!') }}</p>
-                <p class="mt-2 inline-flex items-center gap-2 rounded-lg bg-success/10 px-3 py-1.5 text-sm font-medium text-success">
-                    <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z" clip-rule="evenodd"/></svg>
-                    Admission Open for January Intake - 2026
-                </p>
                 <div class="mt-6 flex flex-col gap-3 sm:mt-8 sm:flex-row sm:gap-4">
                     <a href="{{ route('contact') }}" class="group relative overflow-hidden rounded-full bg-navy px-7 py-3.5 text-center font-semibold text-white shadow-glass transition-all duration-300 hover:bg-navy-700 hover:shadow-lg active:scale-[.98]">
                         <span class="relative z-10">Book Free Counselling</span>
@@ -30,34 +131,17 @@
                     <a href="{{ route('courses') }}" class="rounded-full border border-navy/20 bg-white px-7 py-3.5 text-center font-semibold text-navy transition-all duration-300 hover:border-orange hover:text-orange active:scale-[.98]">Check Eligibility</a>
                 </div>
             </div>
-
             <div x-data x-intersect.once="$el.classList.add('animate-rise')" class="relative opacity-0 [animation-delay:150ms]">
                 <div class="aspect-[4/5] max-h-[420px] overflow-hidden rounded-3xl bg-gradient-to-br from-navy to-navy-900 shadow-glass sm:max-h-none">
                     <div class="flex h-full flex-col items-center justify-center p-6 text-center text-white/90 sm:p-8">
-                        <div class="relative">
-                            <svg class="h-16 w-16 text-orange sm:h-20 sm:w-20 animate-float" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg>
-                        </div>
+                        <svg class="h-16 w-16 text-orange sm:h-20 sm:w-20 animate-float" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M4.26 10.147a60.438 60.438 0 0 0-.491 6.347A48.62 48.62 0 0 1 12 20.904a48.62 48.62 0 0 1 8.232-4.41 60.46 60.46 0 0 0-.491-6.347m-15.482 0a50.636 50.636 0 0 0-2.658-.813A59.906 59.906 0 0 1 12 3.493a59.903 59.903 0 0 1 10.399 5.84c-.896.248-1.783.52-2.658.814m-15.482 0A50.717 50.717 0 0 1 12 13.489a50.702 50.702 0 0 1 7.74-3.342M6.75 15a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5Zm0 0v-3.675A55.378 55.378 0 0 1 12 8.443m-7.007 11.55A5.981 5.981 0 0 0 6.75 15.75v-1.5"/></svg>
                         <p class="mt-4 font-display text-xl sm:mt-6 sm:text-2xl">Pathway to<br>International Education</p>
                         <p class="mt-3 text-sm text-white/60">Transforming Futures Since Day One</p>
                     </div>
                 </div>
-                {{-- Floating glass cards with bounce animation --}}
-                <div class="absolute -left-2 top-12 hidden rounded-2xl border border-white/40 bg-white/70 px-4 py-3 shadow-glass backdrop-blur-xl sm:block sm:-left-4 sm:top-16 sm:px-5 sm:py-4 animate-float-left">
-                    <div class="flex items-center gap-3">
-                        <span class="grid h-9 w-9 place-items-center rounded-full bg-success/15 text-success sm:h-10 sm:w-10">
-                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.704 4.153a.75.75 0 01.143 1.052l-8 10.5a.75.75 0 01-1.127.075l-4.5-4.5a.75.75 0 011.06-1.06l3.894 3.893 7.48-9.817a.75.75 0 011.05-.143z" clip-rule="evenodd"/></svg>
-                        </span>
-                        <div><p class="text-xs text-muted">Visa Approved</p><p class="text-sm font-semibold text-navy sm:text-base">UK Student Visa</p></div>
-                    </div>
-                </div>
-                <div class="absolute -right-2 bottom-12 hidden rounded-2xl border border-white/40 bg-white/70 px-4 py-3 shadow-glass backdrop-blur-xl sm:block sm:-right-4 sm:bottom-16 sm:px-5 sm:py-4 animate-float-right">
-                    <div class="flex items-center gap-3">
-                        <span class="grid h-9 w-9 place-items-center rounded-full bg-orange/15 text-orange sm:h-10 sm:w-10">🎓</span>
-                        <div><p class="text-xs text-muted">Offer Received</p><p class="text-sm font-semibold text-navy sm:text-base">Conditional Offer</p></div>
-                    </div>
-                </div>
             </div>
         </div>
+        @endif
     </section>
 
     {{-- TRUST STRIP — animated counters --}}
@@ -286,6 +370,34 @@
 @push('scripts')
 <script>
 document.addEventListener('alpine:init', () => {
+    Alpine.data('heroSlider', () => ({
+        active: 0,
+        total: {{ $sliders->count() }},
+        interval: null,
+        init() {
+            if (this.total > 1) {
+                this.startAutoplay();
+            }
+        },
+        startAutoplay() {
+            this.interval = setInterval(() => this.next(), 6000);
+        },
+        stopAutoplay() {
+            clearInterval(this.interval);
+        },
+        next() {
+            this.active = (this.active + 1) % this.total;
+        },
+        prev() {
+            this.active = (this.active - 1 + this.total) % this.total;
+        },
+        goTo(i) {
+            this.active = i;
+            this.stopAutoplay();
+            this.startAutoplay();
+        }
+    }));
+
     Alpine.data('counterStrip', () => ({
         students: 0,
         universities: 0,
