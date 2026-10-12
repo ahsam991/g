@@ -2,9 +2,13 @@
 
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\BranchController;
+use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\RoleController;
+use App\Http\Controllers\Admin\ServiceController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\SliderController;
+use App\Http\Controllers\Admin\TestimonialController;
+use App\Http\Controllers\Admin\UniversityController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Auth\ForcedPasswordChangeController;
 use App\Http\Controllers\Auth\TwoFactorChallengeController;
@@ -78,6 +82,14 @@ Route::middleware(['auth', 'verified', 'noindex', 'permission:settings.manage'])
         Route::put('settings', [SettingController::class, 'update'])->name('settings.update');
         Route::resource('sliders', SliderController::class)->except(['show']);
         Route::post('sliders/reorder', [SliderController::class, 'reorder'])->name('sliders.reorder');
+    });
+
+Route::middleware(['auth', 'verified', 'noindex', 'permission:catalogue.manage'])
+    ->prefix('admin')->name('admin.')->group(function () {
+        Route::resource('destinations', DestinationController::class)->except(['show']);
+        Route::resource('universities', UniversityController::class)->except(['show']);
+        Route::resource('services', ServiceController::class)->except(['show']);
+        Route::resource('testimonials', TestimonialController::class)->except(['show']);
     });
 
 Route::middleware(['auth', 'verified', 'noindex', 'permission:audit.view'])

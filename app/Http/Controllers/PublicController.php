@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Destination;
+use App\Models\Service;
 use App\Models\Slider;
+use App\Models\Testimonial;
+use App\Models\University;
 use Illuminate\View\View;
 
 class PublicController extends Controller
@@ -10,28 +14,48 @@ class PublicController extends Controller
     public function home(): View
     {
         $sliders = Slider::active()->get();
+        $destinations = Destination::featured()->get();
+        $services = Service::featured()->get();
+        $testimonials = Testimonial::active()->get();
+        $partnerCount = University::partner()->count();
+        $destinationCount = Destination::where('active', true)->count();
 
-        return view('public.home', compact('sliders'));
+        return view('public.home', compact(
+            'sliders', 'destinations', 'services', 'testimonials',
+            'partnerCount', 'destinationCount'
+        ));
     }
 
     public function about(): View
     {
-        return view('public.about');
+        $testimonials = Testimonial::active()->take(3)->get();
+
+        return view('public.about', compact('testimonials'));
     }
 
     public function destinations(): View
     {
-        return view('public.destinations');
+        $destinations = Destination::active()
+            ->withCount(['universities' => fn ($q) => $q->where('active', true)])
+            ->get();
+
+        return view('public.destinations', compact('destinations'));
     }
 
     public function courses(): View
     {
-        return view('public.courses');
+        $destinations = Destination::active()->with([
+            'universities' => fn ($q) => $q->active()->with(['courses' => fn ($c) => $c->active()]),
+        ])->get();
+
+        return view('public.courses', compact('destinations'));
     }
 
     public function services(): View
     {
-        return view('public.services');
+        $services = Service::active()->get();
+
+        return view('public.services', compact('services'));
     }
 
     public function contact(): View

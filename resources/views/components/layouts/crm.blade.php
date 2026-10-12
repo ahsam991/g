@@ -41,7 +41,7 @@
                 <x-crm.nav-link href="#" :active="request()->routeIs('documents.*')">Documents</x-crm.nav-link>
             @endcan
             @can('catalogue.view')
-                <x-crm.nav-link href="#" :active="request()->routeIs('catalogue.*')">Universities</x-crm.nav-link>
+                <x-crm.nav-link :href="route('admin.universities.index')" :active="request()->routeIs('admin.universities.*')">Universities</x-crm.nav-link>
             @endcan
             @can('appointments.manage')
                 <x-crm.nav-link href="#" :active="request()->routeIs('appointments.*')">Calendar</x-crm.nav-link>
@@ -62,6 +62,12 @@
             @can('settings.manage')
                 <x-crm.nav-link :href="route('admin.settings.edit')" :active="request()->routeIs('admin.settings.*')">Settings</x-crm.nav-link>
                 <x-crm.nav-link :href="route('admin.sliders.index')" :active="request()->routeIs('admin.sliders.*')">Sliders</x-crm.nav-link>
+            @endcan
+            @can('catalogue.manage')
+                <p class="px-3 pb-1 pt-6 text-xs uppercase tracking-wider text-white/40">Website Content</p>
+                <x-crm.nav-link :href="route('admin.destinations.index')" :active="request()->routeIs('admin.destinations.*')">Destinations</x-crm.nav-link>
+                <x-crm.nav-link :href="route('admin.services.index')" :active="request()->routeIs('admin.services.*')">Services</x-crm.nav-link>
+                <x-crm.nav-link :href="route('admin.testimonials.index')" :active="request()->routeIs('admin.testimonials.*')">Testimonials</x-crm.nav-link>
             @endcan
             @can('audit.view')
                 <x-crm.nav-link :href="route('admin.audit.index')" :active="request()->routeIs('admin.audit.*')">Audit log</x-crm.nav-link>

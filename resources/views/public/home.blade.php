@@ -222,19 +222,12 @@
             </div>
 
             <div class="mt-8 grid gap-4 sm:mt-10 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-                @foreach([
-                    ['United Kingdom', '🇬🇧', 'Russell Group universities, 2-year post-study work visa', 'bg-gradient-to-br from-blue-50 to-red-50'],
-                    ['USA', '🇺🇸', 'Ivy League and state universities, OPT work options', 'bg-gradient-to-br from-blue-50 to-indigo-50'],
-                    ['Canada', '🇨🇦', 'Affordable tuition, work while you study, path to residency', 'bg-gradient-to-br from-red-50 to-orange-50'],
-                    ['Australia', '🇦🇺', 'Globally recognised degrees, generous post-study work rights', 'bg-gradient-to-br from-yellow-50 to-green-50'],
-                    ['Malaysia', '🇲🇾', 'Affordable global campuses, gateway to Asia', 'bg-gradient-to-br from-blue-50 to-yellow-50'],
-                    ['Europe', '🇪🇺', 'Low or no tuition, English-taught programmes', 'bg-gradient-to-br from-indigo-50 to-blue-50'],
-                ] as $i => $dest)
+                @foreach($destinations as $i => $dest)
                     <a href="{{ route('destinations') }}" x-data x-intersect.once="$el.classList.add('animate-rise')" class="group overflow-hidden rounded-2xl border border-line bg-white opacity-0 shadow-glass transition-all duration-300 ease-rise hover:-translate-y-1.5 hover:shadow-lg" style="animation-delay: {{ $i * 80 }}ms">
-                        <div class="{{$dest[3]}} p-3 text-center text-5xl transition-transform duration-500 group-hover:scale-110">{!! $dest[1] !!}</div>
+                        <div class="bg-gradient-to-br {{ $dest->gradient_classes ?? 'from-blue-50 to-indigo-50' }} p-3 text-center text-5xl transition-transform duration-500 group-hover:scale-110">{{ $dest->flag }}</div>
                         <div class="p-5 sm:p-6">
-                            <h3 class="font-display text-xl text-navy transition-colors group-hover:text-orange">{{ $dest[0] }}</h3>
-                            <p class="mt-1 text-sm text-muted">{{ $dest[2] }}</p>
+                            <h3 class="font-display text-xl text-navy transition-colors group-hover:text-orange">{{ $dest->name }}</h3>
+                            <p class="mt-1 text-sm text-muted">{{ $dest->short_description }}</p>
                             <span class="mt-3 inline-flex items-center gap-1 text-xs font-semibold text-orange opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-1">Learn more <svg class="h-3 w-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5 21 12m0 0-7.5 7.5M21 12H3"/></svg></span>
                         </div>
                     </a>
@@ -252,21 +245,16 @@
                 <p class="mx-auto mt-3 max-w-xl text-sm text-muted sm:text-base">From choosing the right university to settling in abroad, we provide complete end-to-end support.</p>
             </div>
             <div class="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3">
-                @foreach([
-                    ['Free Counselling', 'Expert guidance at no cost on choosing a university and program. Honest, no-pressure advice from certified counsellors.', 'M20.25 8.511c.884.284 1.5 1.128 1.5 2.097v4.286c0 1.136-.847 2.1-1.98 2.193-.34.027-.68.052-1.02.072v3.091l-3-3c-1.354 0-2.694-.055-4.02-.163a2.115 2.115 0 0 1-.825-.242m9.345-8.334a2.126 2.126 0 0 0-.476-.095 48.64 48.64 0 0 0-8.048 0c-1.131.094-1.976 1.057-1.976 2.192v4.286c0 .837.46 1.58 1.155 1.951m9.345-8.334V6.637c0-1.621-1.152-3.026-2.76-3.235A48.455 48.455 0 0 0 11.25 3c-2.115 0-4.198.137-6.24.402-1.608.209-2.76 1.614-2.76 3.235v6.226c0 1.621 1.152 3.026 2.76 3.235.577.075 1.157.14 1.74.194V21l4.155-4.155'],
-                    ['Admission Support', 'University application help, course shortlisting, document preparation and follow-up with institutions.', 'M19.5 14.25v-2.625a3.375 3.375 0 0 0-3.375-3.375h-1.5A1.125 1.125 0 0 1 13.5 7.125v-1.5a3.375 3.375 0 0 0-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 0 0-9-9Z'],
-                    ['Visa Compliance', 'Document checks, SOP guidance, interview preparation. Pre-visa interview prep for high approval rates.', 'M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z'],
-                    ['Student Accommodation', 'Verified housing arranged before you fly, close to your campus. Introductions to other students going your way.', 'M8.25 21v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21m0 0h4.5V3.545M12.75 21h7.5V10.75M2.25 21h1.5m18 0h-18M2.25 9l4.5-1.636M18.75 3l-1.5.545m0 6.205 3 1m1.5.5-1.5-.5M6.75 7.364V3h-3v18m3-13.636 10.5-3.819'],
-                    ['IELTS &amp; English', 'Training and preparation to meet your language requirements. Spoken English and IELTS coaching available.', 'M10.5 21l5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364V3m0 2.364a48.174 48.174 0 0 1 0 0'],
-                    ['End-to-End Support', 'From first chat to post-arrival settling in. BRP collection, bank accounts and pre-departure briefing included.', 'M9 12.75 11.25 15 15 9.75M21 12c0 1.268-.63 2.39-1.593 3.068a3.745 3.745 0 0 1-1.043 3.296 3.745 3.745 0 0 1-3.296 1.043A3.745 3.745 0 0 1 12 21c-1.268 0-2.39-.63-3.068-1.593a3.746 3.746 0 0 1-3.296-1.043 3.745 3.745 0 0 1-1.043-3.296A3.745 3.745 0 0 1 3 12c0-1.268.63-2.39 1.593-3.068a3.745 3.745 0 0 1 1.043-3.296 3.746 3.746 0 0 1 3.296-1.043A3.746 3.746 0 0 1 12 3c1.268 0 2.39.63 3.068 1.593a3.746 3.746 0 0 1 3.296 1.043 3.746 3.746 0 0 1 1.043 3.296A3.745 3.745 0 0 1 21 12Z'],
-                ] as $i => $service)
+                @foreach($services as $i => $service)
                     <div x-data x-intersect.once="$el.classList.add('animate-rise')" class="group rounded-2xl border border-line bg-white p-5 opacity-0 shadow-glass transition-all duration-300 ease-rise hover:-translate-y-1.5 hover:shadow-lg hover:border-orange/30 sm:p-7" style="animation-delay: {{ $i * 80 }}ms">
+                        @if($service->icon_svg)
                         <div class="mb-3 inline-flex h-11 w-11 items-center justify-center rounded-xl bg-navy/5 text-navy transition-colors group-hover:bg-orange group-hover:text-white">
-                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="{!! $service[2] !!}"/></svg>
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="{{ $service->icon_svg }}"/></svg>
                         </div>
+                        @endif
                         <div class="h-1 w-10 rounded-full bg-line transition-all duration-300 group-hover:w-16 group-hover:bg-orange"></div>
-                        <h3 class="mt-4 font-display text-xl text-navy">{!! $service[0] !!}</h3>
-                        <p class="mt-2 text-sm leading-relaxed text-muted">{{ $service[1] }}</p>
+                        <h3 class="mt-4 font-display text-xl text-navy">{{ $service->title }}</h3>
+                        <p class="mt-2 text-sm leading-relaxed text-muted">{{ $service->short_description }}</p>
                     </div>
                 @endforeach
             </div>
@@ -312,25 +300,22 @@
                 <p class="mt-2 text-sm text-muted sm:mt-3 sm:text-base">Real students, real approvals. অভিনন্দন!</p>
             </div>
             <div class="mt-8 grid gap-5 sm:mt-12 sm:grid-cols-2 lg:grid-cols-3">
-                @foreach([
-                    ['🇬🇧', 'Pushpita Das', 'UK Student Visa', 'The entire visa process was smooth. Global Consultancy guided me step by step with clear instructions.'],
-                    ['🇬🇧', 'Jannatul Ferdous', 'UK Student Visa', 'From choosing the right university to getting my visa approved, they were with me at every step.'],
-                    ['🇬🇧', 'Fahima Momtaz', 'UK Student Visa', 'I got my visa approved on the first attempt! Their interview preparation made all the difference.'],
-                    ['🇨🇦', 'Abdur Rahman Fahad', 'Canada Study Permit', 'They helped me find the right programme and handled all my documentation. Highly recommend!'],
-                    ['🇦🇺', 'Maisha Ibnat', 'Australia Student Visa', 'Offer, visa and accommodation sorted in one smooth journey. Could not have done it without them.'],
-                    ['🇲🇾', 'Sanjida Sultana Mahin', 'Malaysia Student Visa', 'Affordable and professional service. They found me the perfect university in Malaysia.'],
-                ] as $i => $story)
+                @foreach($testimonials as $i => $story)
                     <figure x-data x-intersect.once="$el.classList.add('animate-rise')" class="rounded-2xl border border-line bg-white p-5 opacity-0 shadow-glass transition-all duration-300 ease-rise hover:-translate-y-1 hover:shadow-lg sm:p-6" style="animation-delay: {{ $i * 100 }}ms">
                         <div class="flex items-center gap-3">
-                            <span class="text-3xl">{!! $story[0] !!}</span>
+                            @if($story->photo)
+                                <img src="{{ asset('storage/' . $story->photo) }}" alt="" class="h-12 w-12 rounded-full object-cover">
+                            @else
+                                <span class="text-3xl">{{ $story->country_flag }}</span>
+                            @endif
                             <div>
-                                <figcaption class="font-semibold text-navy">{{ $story[1] }}</figcaption>
-                                <p class="text-xs font-medium text-orange">{{ $story[2] }} ✓</p>
+                                <figcaption class="font-semibold text-navy">{{ $story->name }}</figcaption>
+                                <p class="text-xs font-medium text-orange">{{ $story->visa_type }} ✓</p>
                             </div>
                         </div>
-                        <blockquote class="mt-4 text-sm leading-relaxed text-muted">"{{ $story[3] }}"</blockquote>
+                        <blockquote class="mt-4 text-sm leading-relaxed text-muted">"{{ $story->quote }}"</blockquote>
                         <div class="mt-3 flex gap-0.5">
-                            @for($s = 0; $s < 5; $s++)
+                            @for($s = 0; $s < $story->rating; $s++)
                                 <svg class="h-4 w-4 text-orange" fill="currentColor" viewBox="0 0 20 20"><path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z"/></svg>
                             @endfor
                         </div>

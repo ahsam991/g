@@ -12,6 +12,9 @@ class DatabaseSeeder extends Seeder
             RolePermissionSeeder::class,
             BranchSeeder::class,
             SettingSeeder::class,
+            LeadSourceSeeder::class,
+            SliderSeeder::class,
+            CmsSeeder::class,
         ]);
     }
 }
