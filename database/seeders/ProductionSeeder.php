@@ -19,6 +19,7 @@ class ProductionSeeder extends Seeder
             LeadSourceSeeder::class,
             SliderSeeder::class,
             CmsSeeder::class,
+            DocumentTypeSeeder::class,
         ]);
 
         $email = 'admin@gconsultancy.co.uk';

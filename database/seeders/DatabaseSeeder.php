@@ -15,6 +15,7 @@ class DatabaseSeeder extends Seeder
             LeadSourceSeeder::class,
             SliderSeeder::class,
             CmsSeeder::class,
+            DocumentTypeSeeder::class,
         ]);
     }
 }

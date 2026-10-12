@@ -38,7 +38,7 @@
                 <x-crm.nav-link href="#" :active="request()->routeIs('applications.*')">Applications</x-crm.nav-link>
             @endcan
             @can('documents.view')
-                <x-crm.nav-link href="#" :active="request()->routeIs('documents.*')">Documents</x-crm.nav-link>
+                <x-crm.nav-link :href="route('admin.documents.index')" :active="request()->routeIs('admin.documents.*')">Documents</x-crm.nav-link>
             @endcan
             @can('catalogue.view')
                 <x-crm.nav-link :href="route('admin.universities.index')" :active="request()->routeIs('admin.universities.*')">Universities</x-crm.nav-link>

@@ -1,6 +1,10 @@
 <x-layouts.crm :title="$candidate->full_name">
     <x-page-header :title="$candidate->full_name" :subtitle="$candidate->uid.' · added '.$candidate->created_at->format('d M Y')">
         <x-slot:actions>
+            @can('documents.view')
+                <a href="{{ route('admin.documents.candidate', $candidate) }}"
+                   class="rounded-xl bg-navy px-4 py-2 text-sm font-medium text-white">Documents</a>
+            @endcan
             @can('update', $candidate)
                 <a href="{{ route('candidates.edit', $candidate) }}"
                    class="rounded-xl bg-ink px-4 py-2 text-sm font-medium text-white">Edit</a>

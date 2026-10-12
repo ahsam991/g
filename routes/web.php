@@ -17,6 +17,7 @@ use App\Http\Controllers\Auth\TwoFactorSetupController;
 use App\Http\Controllers\CandidateBulkController;
 use App\Http\Controllers\CandidateController;
 use App\Http\Controllers\CandidateImportController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\EnquiryController;
 use App\Http\Controllers\LeadController;
 use App\Http\Controllers\ProfileController;
@@ -65,6 +66,22 @@ Route::middleware(['auth', 'verified', 'noindex'])->group(function () {
     Route::get('candidates/{candidate}', [CandidateController::class, 'show'])->name('candidates.show');
     Route::post('candidates/{candidate}/archive', [CandidateController::class, 'archive'])->name('candidates.archive');
     Route::post('candidates/{candidate}/restore', [CandidateController::class, 'restore'])->name('candidates.restore');
+
+    // Documents
+    Route::prefix('admin/documents')->name('admin.documents.')->group(function () {
+        Route::get('/', [DocumentController::class, 'index'])->name('index');
+        Route::get('candidates/{candidate}', [DocumentController::class, 'candidateDocuments'])->name('candidate');
+        Route::get('candidates/{candidate}/upload', [DocumentController::class, 'upload'])->name('upload');
+        Route::post('candidates/{candidate}/upload', [DocumentController::class, 'store'])->name('store');
+        Route::post('candidates/{candidate}/request', [DocumentController::class, 'requestDocument'])->name('request');
+        Route::get('{document}/download', [DocumentController::class, 'download'])->name('download');
+        Route::get('{document}/preview', [DocumentController::class, 'preview'])->name('preview');
+        Route::post('{document}/verify', [DocumentController::class, 'verify'])->name('verify');
+        Route::post('{document}/reject', [DocumentController::class, 'reject'])->name('reject');
+        Route::post('{document}/reverse', [DocumentController::class, 'reverseRejection'])->name('reverse');
+        Route::get('{document}/access-log', [DocumentController::class, 'accessLog'])->name('access-log');
+        Route::get('{document}/versions', [DocumentController::class, 'versions'])->name('versions');
+    });
 });
 
 // Every signed-in area stays out of search engines.

@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Models\CandidateDocument;
 use App\Models\Course;
 use App\Models\Destination;
 use App\Models\Partner;
@@ -9,6 +10,7 @@ use App\Models\Service;
 use App\Models\Testimonial;
 use App\Models\University;
 use App\Models\User;
+use App\Policies\CandidateDocumentPolicy;
 use App\Policies\CmsPolicy;
 use App\Services\Settings;
 use App\Services\Uid;
@@ -26,6 +28,8 @@ class AppServiceProvider extends ServiceProvider
 
     public function boot(): void
     {
+        Gate::policy(CandidateDocument::class, CandidateDocumentPolicy::class);
+
         $cmsPolicy = CmsPolicy::class;
         Gate::policy(Destination::class, $cmsPolicy);
         Gate::policy(University::class, $cmsPolicy);
