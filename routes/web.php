@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\BranchController;
+use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DestinationController;
 use App\Http\Controllers\Admin\RoleController;
 use App\Http\Controllers\Admin\ServiceController;
@@ -35,7 +36,7 @@ Route::post('/enquiry', [EnquiryController::class, 'store'])
     ->middleware('throttle:10,1')
     ->name('enquiry.store');
 
-Route::get('/dashboard', fn () => view('dashboard'))
+Route::get('/dashboard', DashboardController::class)
     ->middleware(['auth', 'verified', 'noindex'])
     ->name('dashboard');
 
